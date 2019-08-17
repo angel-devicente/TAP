@@ -1,0 +1,479 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This text file is part of the source of 
+%%%% `Parallel Programming in MPI and OpenMP'
+%%%% by Victor Eijkhout, copyright 2012-9
+%%%%
+%%%% mpi-ptp.tex : about point-to-point communication
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Distributed computing and distributed data}
+
+One reason for using MPI is that sometimes you need to work on
+more data than can fit in the memory of a single processor.
+With distributed memory, each processor then gets a part
+of the whole data structure and only works on that.
+
+So let's say we have a large array, and we want to
+distribute the data over the processors.
+That means that, with \n{p} processes and \n{n}~elements
+per processor, we have a total of $\mathtt{n}\cdot\mathtt{p}$
+elements.
+
+\begin{figure}[ht]
+  \includegraphics[scale=.1]{mpi-array}
+  \caption{Local parts of a distributed array}
+  \label{fig:mpi-array}
+\end{figure}
+
+We sometimes say that \n{data} is the local part
+of a \indexterm{distributed array} with a total size of
+$\mathtt{n}\cdot\mathtt{p}$
+elements.
+However, this array only exists
+conceptually: each processor has an array with lowest index zero,
+and you have to translate that yourself to an index in the global
+array.
+In other words, you have to write your code in such a way that
+it acts like you're working with a large array that is distributed
+over the processors, while
+actually manipulating only the local arrays on the processors.
+
+Your typical code then looks like
+
+\lstset{style=reviewcode,language=C} %pyskip
+\begin{lstlisting}
+int myfirst = .....;
+for (int ilocal=0; ilocal<nlocal; ilocal++) {
+   int iglobal = myfirst+ilocal;
+   array[ilocal] = f(iglobal);
+}
+\end{lstlisting}
+
+\begin{exercise}
+  \label{ex:fft-vector}
+  Implement a (very simple-minded) Fourier transform: if $f$ is a
+  function on the interval $[0,1]$, then the $n$-th Fourier
+  coefficient is
+  \[ f_n\hat = \int_0^1 f(t)e^{-t/\pi}\,dt \]
+  which we approximate by
+  \[ f_n\hat = \sum_{i=0}^{N-1} f(ih)e^{-in/\pi} \]
+  \begin{itemize}
+  \item Make one distributed array for the $e^{-inh}$ coefficients,
+  \item make one distributed array for the $f(ih)$ values
+  \item calculate a couple of coefficients
+  \end{itemize}
+\end{exercise}
+
+\begin{comment}
+  \begin{exercise}
+    \label{ex:sumsquares}
+    We want to compute $\sum_{n=1}^Nn^2$, and we do that as follows
+    by filling in an array and summing the elements. (Yes, you can do it
+    without an array, but for purposes of the exercise do it with.)
+
+    Set a variable \n{N} for the total length of the array, and compute
+    the local number of elements. Make sure you handle the case where
+    $N$ does not divide perfectly by the number of processes.
+
+    \begin{itemize}
+    \item Now allocate the local parts: each processor should allocate
+      only local elements, not the whole vector.\\
+      (Allocate your array as real numbers. Why are integers not a good idea?)
+    \item On each processor, initialize the local array
+      so that the $i$-th location of the distributed array
+      (for $i=0,\ldots,N-1$)
+      contains~$(i+\nobreak 1)^2$.
+    \item Now use a collective operation to compute the sum of the array values.
+      The right value is $(2N^3+3N^2+N)/6$. Is that what you get?
+    \end{itemize}
+    (Note that computer arithmetic is not exact: the computed sum will
+    only be accurate up to some relative accuracy.)
+  \end{exercise}
+\end{comment}
+
+\begin{exercise}
+  In the previous exercise you worked with a distributed array,
+  computing a local quantity and combining that into a global
+  quantity.
+  Why is it not a good idea to gather the whole distributed array on a
+  single processor, and do all the computation locally?
+\end{exercise}
+
+If the array size is not perfectly divisible by the number of processors,
+we have to come up with a division that is uneven, but not too much.
+You could for instance, write
+
+\lstset{style=reviewcode,language=C} %pyskip
+\begin{lstlisting}
+int Nglobal, // is something large
+    Nlocal = Nglobal/ntids,
+    excess = Nglobal%ntids;
+if (mytid==ntids-1) 
+  Nlocal += excess;
+\end{lstlisting}
+
+\begin{exercise}
+  Argue that this strategy is not optimal. Can you come up with a
+  better distribution?
+  Load balancing is further discussed in~\HPSCref{sec:load}.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:inproduct}
+  Implement an inner product routine: let $x$ be a
+  distributed vector of size~$N$ with elements $x[i]=i$,
+  and compute~$x^tx$.
+  As before, the right value is $(2N^3+3N^2+N)/6$.
+
+  Use the inner product value to scale to vector so that it has
+  norm~1.
+  Check that your computation is correct.
+\end{exercise}
+
+%% \Level 0 {Blocking point-to-point operations}
+\input chapters/mpi-blocksend
+
+%% \Level 0 {Non-blocking point-to-point operations}
+\input chapters/mpi-nonblock
+
+\Level 0 {More about point-to-point communication}
+
+\Level 1 {Message probing}
+
+MPI receive calls specify a receive buffer, and its size has to be
+enough for any data sent. In case you really have no idea how much data
+is being sent, and you don't want to overallocate the receive buffer,
+you can use a `probe' call.
+
+The routine \indexmpishow{MPI_Probe} (and \indexmpishow{MPI_Iprobe},
+for which see section~\ref{sec:progress}), accepts a message,
+but does not copy the data. Instead, when probing tells you that there is a
+message, you can use \indexmpishow{MPI_Get_count} to determine its size,
+allocate a large enough receive buffer, and do a regular receive to
+have the data copied.
+
+\cverbatimsnippet[examples/mpi/c/probe.c]{probe}
+
+\mpiRoutineRef{MPI_Probe}
+
+There is a problem with the \indexmpishow{MPI_Probe} call in a
+multithreaded environment: the following scenario can happen.
+\begin{enumerate}
+\item A thread determines by probing that a certain message has come
+  in.
+\item It issues a blocking receive call for that message\dots
+\item But in between the probe and the receive call another thread
+  has already received the message.
+\item \dots~Leaving the first thread in a blocked state with not
+  message to receive.
+\end{enumerate}
+This is solved by \indexmpishow{MPI_Mprobe}, which after a successful
+probe removes the message from the \indexterm{matching queue}: the
+list of messages that can be matched by a receive call. The thread
+that matched the probe now issues an \indexmpishow{MPI_Mrecv} call on
+that message through an object of type \indexmpidef{MPI_Message}.
+
+\mpiRoutineRef{MPI_Mprobe}
+
+\mpiRoutineRef{MPI_Mrecv}
+
+\Level 1 {The Status object and wildcards}
+\label{sec:mpi-wildcard}
+\index{message!status|(textbf}
+
+With some receive calls you know everything about the message in advance:
+its source, tag, and size. In other cases you want to leave some options
+open, and inspect the message for them after it was received.
+To do this, the receive call has a \indexmpishow{MPI_Status}
+parameter. This was discussed in section~\ref{sec:mpi-status}.
+
+This status is a property of the actually received messsage, so \indexmpishow{MPI_Irecv}
+does not have a status parameter, but \indexmpishow{MPI_Wait} does.
+
+The \indexmpishow{MPI_Status} object
+is a structure with the following
+freely accessible members:
+
+\Level 2 {Source}
+
+In some applications it makes sense that a message can come from 
+one of a number of processes. In this case, it is possible to specify
+\indexmpishow{MPI_ANY_SOURCE} as the source.
+%
+To find out the \emph{source}\index{message!status!source}
+where the message actually
+came from, you would use the \indexmpishow{MPI_SOURCE} field of the status object
+that is delivered by \indexmpishow{MPI_Recv} or the \indexmpishow{MPI_Wait...} call after an \indexmpishow{MPI_Irecv}.
+\begin{lstlisting}
+MPI_Recv(recv_buffer+p,1,MPI_INT, MPI_ANY_SOURCE,0,comm,
+         &status);
+sender = status.MPI_SOURCE;
+\end{lstlisting}
+
+The source of a message is a member of the status structure.
+
+\mpiRoutineRef{MPI_SOURCE}
+
+There are various scenarios where receiving from `any source' makes sense.
+One is that of the \indexterm{master-worker model}. The master task would first send
+data to the worker tasks, then issues a blocking wait for the data of whichever process
+finishes first.
+
+\Level 2 {Tag}
+
+If a processor is expecting more than one messsage from a single other processor,
+message tags are used to distinguish between them. In that case,
+a value of \indexmpishow{MPI_ANY_TAG} can be used, and the actual
+\emph{tag}\index{message!status!tag}
+of a message can be retrieved from the status structure.
+
+\mpiRoutineRef{MPI_TAG}
+
+\Level 2 {Error}
+
+Any \emph{errors}\index{message!status!error}
+during the receive operation can be found in the status
+structurel
+
+\mpiRoutineRef{MPI_ERROR}
+
+\Level 2 {Count}
+
+If the amount of data received is not known a~priori, the
+\emph{count}\index{message!count} of elements received
+can be found as
+\begin{lstlisting}
+MPI_Get_count(&recv_status,MPI_INT,&recv_count);
+\end{lstlisting}
+This may be necessary since the \n{count} argument to \indexmpishow{MPI_Recv} is 
+the buffer size, not an indication of the actually expected number of
+data items.
+
+Note that unlike the above this is not directly a member of the status
+structure.
+
+\mpiRoutineRef{MPI_Get_count}
+
+\Level 2 {Example: receiving from any source}
+
+Using the \indexmpishow{MPI_ANY_SOURCE} specifier. We retrieve the
+actual source from the \indexmpishow{MPI_Status} object through the
+\indexmpishow{MPI_SOURCE} field.
+%
+\cverbatimsnippet[examples/mpi/c/anysource.c]{anysource}
+%
+\pverbatimsnippet{anysourcep}
+
+In sections \ref{prj:mandelbrot} and~\ref{sec:mpi-test} we explained
+the manager-worker model, and how it offers an opportunity for inspecting the
+\indexmpishow{MPI_SOURCE} field of the \indexmpishow{MPI_Status}
+object describing the data that was received.
+
+\Level 1 {Synchronous and asynchronous communication}
+
+\index{communication!synchronous|(textbf}
+\index{communication!asynchronous|(textbf}
+
+It is easiest to think of blocking as a form of synchronization with
+the other process, but that is not quite true. Synchronization is a
+concept in itself, and we talk about \emph{synchronous} communication
+if there is actual coordination going on with the other process,
+and \emph{asynchronous} communication if there is not. Blocking then
+only refers to the program waiting until the user data is safe
+to reuse; in the synchronous case a blocking call means that the data
+is indeed transferred, in the asynchronous case it only means that the
+data has been transferred to some system buffer.
+%
+\begin{figure}[ht]
+\includegraphics[scale=.15]{block-vs-sync}
+\caption{Blocking and synchronicity}
+\label{fig:block-sync}
+\end{figure}
+The four possible cases are illustrated in figure~\ref{fig:block-sync}.
+
+MPI has a number of routines for synchronous communication,
+such as \indexmpishow{MPI_Ssend}.
+
+\cverbatimsnippet[examples/mpi/c/ssendblock.c]{ssendblock}
+
+\index{communication!synchronous|)}
+\index{communication!asynchronous|)}
+
+\Level 1 {Persistent communication}
+\label{sec:persistent}
+\index{communication!persistent|(textbf}
+
+An \indexmpishow{MPI_Isend} or \indexmpishow{MPI_Irecv} call has an
+\indexmpishow{MPI_Request} parameter.  This is an object that gets
+created in the send/recv call, and deleted in the wait call. You can
+imagine that this carries some overhead, and if the same communication
+is repeated many times you may want to avoid this overhead by reusing
+the request object.
+
+To do this, MPI has \emph{persistent communication}:
+\index{persistent communication|see{communication, persistent}}
+\begin{itemize}
+\item You describe the communication with
+  \indexmpishow{MPI_Send_init}, which has the same calling sequence as
+  \indexmpishow{MPI_Isend}, or \indexmpishow{MPI_Recv_init}, which has the same
+  calling sequence as \indexmpishow{MPI_Irecv}.
+\item The actual communication is performed by calling
+  \indexmpishow{MPI_Start}, for a single request, or
+  \indexmpishow{MPI_Startall} for an array or requests.
+\item Completion of the communication is confirmed with
+  \indexmpishow{MPI_Wait} or similar routines as you have seen in the
+  explanation of non-blocking communication.
+\item The wait call does not release the request object: that is done
+  with \indexmpishow{MPI_Request_free}.
+\end{itemize}
+
+The calls \indexmpishow{MPI_Send_init} and \indexmpishow{MPI_Recv_init}
+for creating a persistent communication have the same syntax as 
+those for non-blocking sends and receives. The difference is that they do not start
+an actual communication, they only create the request object.
+%
+\mpiRoutineRef{MPI_Send_init}
+%
+\mpiRoutineRef{MPI_Recv_init}
+%
+
+Given these request object, a communication (both send and receive) is then started
+with \indexmpishow{MPI_Start} for a single request or \indexmpishow{MPI_Start_all} for 
+multiple requests, given in an array.
+%
+\mpiRoutineRef{MPI_Start}
+%
+\mpiRoutineRef{MPI_Startall}
+%
+These are equivalent to starting an \indexmpishow{MPI_Isend} or
+\indexmpishow{MPI_Isend}; correspondingly, it is necessary to issue an
+\indexmpishow{MPI_Wait...} call (section~\ref{sec:nonblocking}) to
+determine their completion.
+
+After a request object has been used, possibly multiple times, it can
+be freed; see~\ref{ref:mpirequest}.
+
+In the following example a ping-pong is implemented with persistent communication.
+\cverbatimsnippet[examples/mpi/c/persist.c]{persist}
+%
+\pverbatimsnippet{persistp}
+
+As with ordinary send commands, there are the variants
+\indexmpishow{MPI_Bsend_init},
+\indexmpishow{MPI_Ssend_init},
+\indexmpishow{MPI_Rsend_init}.
+
+\index{communication!persistent|)}
+
+\Level 1 {Buffered communication}
+\label{sec:buffered}
+
+\begin{figure}[ht]
+  \includegraphics[scale=.5]{bufferattach}
+  \caption{User communication routed through an attached buffer}
+  \label{fig:bufattach}
+\end{figure}
+
+By now you have probably got the notion that managing buffer
+space in MPI is important: data has to be somewhere, either in
+user-allocated arrays or in system buffers. Using
+\indextermsubdef{buffered}{communication} is yet another
+way of managing buffer space.
+\begin{enumerate}
+\item You allocate your own buffer space, and you attach it to your
+  process. This buffer is not a send buffer: it is a replacement for
+  buffer space used inside the MPI library or on the network card;
+  figure~\ref{fig:bufattach}. If high-bandwdith memory is available,
+  you could create your buffer there.
+\item You use the \indexmpishow{MPI_Bsend} call for sending, using
+  otherwise normal send and receive buffers;
+\item You detach the buffer when you're done with the buffered sends.
+\end{enumerate}
+
+\Level 2 {Bufferend send calls}
+
+Section~\ref{sec:nonblock} discusses non-blocking communication, where
+multiple sends will be under way. Since these sends are under way with
+possibly no receive having been posted, the send buffers can not be
+reused. It would be possible to reuse the send buffers if MPI had
+enough internal buffer space. For this, there is the
+\indextermsub{buffered}{send} mode, where you first give MPI internal buffer
+space; subsequently only a single send buffer is needed. The
+\indexmpishow{MPI_Bsend} call is non-blocking.
+
+\mpiRoutineRef{MPI_Bsend}
+
+There can be only one buffer per process; its size should be enough
+for all outstanding \indexmpishow{MPI_Bsend} calls that are simultaneously
+outstanding, plus \indexmpidef{MPI_BSEND_OVERHEAD}.
+You can compute the needed size of the buffer with \indexmpishow{MPI_Pack_size};
+see section~\ref{sec:pack}.
+
+\mpiRoutineRef{MPI_Buffer_attach}
+
+The possible error codes are
+\begin{itemize}
+\item \indexmpishow{MPI_SUCCESS} the routine completed successfully.
+\item \indexmpishow{MPI_ERR_BUFFER} The buffer pointer is invalid;
+  this typically means that you have supplied a null pointer.
+\item \indexmpishow{MPI_ERR_INTERN} An internal error in MPI has been detected.
+\end{itemize}
+
+The buffer is detached with \indexmpishow{MPI_Buffer_detach}:
+\begin{lstlisting}
+int MPI_Buffer_detach(
+  void *buffer, int *size);
+\end{lstlisting}
+This returns the address and size of the buffer; the call blocks
+until all buffered messages have been delivered.
+
+You can force delivery by
+\begin{lstlisting}
+MPI_Buffer_detach( &b, &n );
+MPI_Buffer_attach( b, n );
+\end{lstlisting}
+
+The asynchronous version is \indexmpishow{MPI_Ibsend}, the persistent
+(see section~\ref{sec:persistent}) call is \indexmpishow{MPI_Bsend_init}.
+
+\Level 2 {Persistent buffered communication}
+
+There is a persistent variant of buffered sends, as with regular
+sends (section~\ref{sec:persistent}).
+
+\mpiRoutineRef{MPI_Bsend_init}
+
+\Level 1 {More about requests}
+\label{ref:mpirequest}
+
+An \indexmpishow{MPI_Request} object is not actually an object,
+unlike \indexmpishow{MPI_STATUS}. Instead it is an (opaque) pointer.
+This meeans that when you call, for instance, \indexmpishow{MPI_Irecv},
+MPI will allocate an actual request object, and return its
+address in the \indexmpishow{MPI_Request} variable.
+
+Correspondingly, calls to \indexmpishow{MPI_Wait...} or \indexmpishow{MPI_Test}
+free this object.
+If your application is such that you do not use `wait' call, you can free the
+request object explicitly
+with \indexmpishow{MPI_Request_free}.
+\begin{lstlisting}
+int MPI_Request_free(MPI_Request *request)
+\end{lstlisting}
+
+You can inspect the status of a request without freeing the request object
+with \indexmpishow{MPI_Request_get_status}:
+\begin{lstlisting}
+int MPI_Request_get_status(
+  MPI_Request request,
+  int *flag,
+  MPI_Status *status
+);
+\end{lstlisting}
+
+\index{communication!two-sided|)}
