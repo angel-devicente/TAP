@@ -28,7 +28,8 @@
 \includecomment{review}
 \includecomment{book}
 
-\usepackage{graphicx,outliner,undertilde,wrapfig}
+%\usepackage{graphicx,outliner,undertilde,wrapfig}
+\usepackage{graphicx,outliner,wrapfig}
 
 % fancy text stuff
 \usepackage{dirtree,multicol,multirow,times}
@@ -179,12 +180,12 @@
 \setcounter{secnumdepth}{4}
 \OutlineLevelStart4{\paragraph{\bf #1}}
 
-\input acromacs
-\input bookmacs
+\input macros/acromacs
+\input macros/bookmacs
 \input exmacs
 \input tutmacs
-\input idxmacs
-\input listingmacs
+\input macros/idxmacs
+\input macros/listingmacs
 
 \newcommand\commandref[1]{\label{sec:#1}
   \begin{quotation}
@@ -293,7 +294,7 @@
 \part{The Rest}
 
 %\CHAPTER{Ruminations on parallelism}{patterns}
-\CHAPTER{Exploring computer architecture}{architecture}
+%\CHAPTER{Exploring computer architecture}{architecture}
 \CHAPTER{Process and thread affinity}{affinity}
 \CHAPTER{Hybrid computing}{hybrid}
 \CHAPTER{Random number generation}{random}
@@ -389,7 +390,7 @@ Bold reference: defining passage; italic reference: illustration.
 \end{multicols*}
 
 \hbox{}\vfill
-\includegraphics{isbn_barcode}
+%\includegraphics{isbn_barcode}
 
 \closeout\chapterlist
 \end{document}
