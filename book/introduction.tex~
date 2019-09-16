@@ -1,0 +1,20 @@
+These are the notes to be followed in the course ``Técnicas de Programación'' of
+the Master in Astrophysics (ULL).
+
+The objective of the course is to learn some programming techniques necessary in
+many scientific codes. In particular, we will study about dynamic data
+structures and MPI parallel programming with Fortran.
+
+All the material taught in the course will be motivated by a sample N-body
+problem. We will start by developing a naïve and serial code; then we will study
+about the much more efficient Barnes-Hut algorithm and in order to implement
+this algorithm we will have to learn about dynamic data structures, recursion,
+trees, lists, etc. Once a Barnes-Hut serial implementation is finished, we will
+focus on learning the basics of parallel programming, in this case using the MPI
+library, and on parallelizing the Barnes-Hut version of our code.
+
+We will also touch briefly on code debugging and profiling (both in serial and
+in parallel codes) and on other parallel programming models (OpenMP, CUDA,
+OpenACC) and how to use them together with MPI. 
+
+

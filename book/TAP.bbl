@@ -1,0 +1,86 @@
+\begin{thebibliography}{10}
+
+\bibitem{Schlitt_2000}
+{Schlitt, Wayne}.
+\newblock {\em The XStar N-body Solver. Theory of Operation}.
+\newblock \url{http://www.schlitt.net/xstar/n-body.pdf}.
+  
+%% \bibitem{Chan2007Collective}
+%% Ernie Chan, Marcel Heimlich, Avi Purkayastha, and Robert van~de Geijn.
+%% \newblock Collective communication: theory, practice, and experience.
+%% \newblock {\em Concurrency and Computation: Practice and Experience},
+%%   19:1749--1783, 2007.
+%% 
+%% \bibitem{cornebize:EmulateHPCms}
+%% Tom Cornebize, Franz~C Heinrich, Arnaud Legrand, and J{\'e}r{\^o}me Vienne.
+%% \newblock {Emulating High Performance Linpack on a Commodity Server at the
+%%   Scale of a Supercomputer}.
+%% \newblock working paper or preprint, December 2017.
+%% 
+%% \bibitem{Eijkhout:MPItype-arxiv}
+%% Victor {Eijkhout}.
+%% \newblock {Performance of {MPI} sends of non-contiguous data}.
+%% \newblock {\em arXiv e-prints}, page arXiv:1809.10778, Sep 2018.
+%% 
+%% \bibitem{Eijkhout:IHPSClulu}
+%% {Eijkhout, Victor with Robert van de Geijn and Edmond Chow}.
+%% \newblock {\em Introduction to High Performance Scientific Computing}.
+%% \newblock lulu.com, 2011.
+%% \newblock \url{http://www.tacc.utexas.edu/~eijkhout/istc/istc.html}.
+%% 
+%% \bibitem{goglin:hwloc}
+%% Brice Goglin.
+%% \newblock {Managing the Topology of Heterogeneous Cluster Nodes with Hardware
+%%   Locality (hwloc)}.
+%% \newblock In {\em {International Conference on High Performance Computing \&
+%%   Simulation (HPCS 2014)}}, Bologna, Italy, July 2014. {IEEE}.
+%% 
+%% \bibitem{Gropp:UsingMPI1}
+%% W.~Gropp, E.~Lusk, and A.~Skjellum.
+%% \newblock {\em Using {MPI}}.
+%% \newblock {T}he {MIT} {P}ress, 1994.
+%% 
+%% \bibitem{Hoefler:case-for-nbc}
+%% Torsten Hoefler, Prabhanjan Kambadur, Richard~L. Graham, Galen Shipman, and
+%%   Andrew Lumsdaine.
+%% \newblock A case for standard non-blocking collective operations.
+%% \newblock In {\em Proceedings, Euro PVM/MPI}, Paris, France, October 2007.
+%% 
+%% \bibitem{Hoefler:2010:SCP}
+%% Torsten Hoefler, Christian Siebert, and Andrew Lumsdaine.
+%% \newblock Scalable communication protocols for dynamic sparse data exchange.
+%% \newblock {\em SIGPLAN Not.}, 45(5):159--168, January 2010.
+%% 
+%% \bibitem{simgrid-homepage}
+%% INRIA.
+%% \newblock {SimGrid} homepage.
+%% \newblock \url{http://simgrid.gforge.inria.fr/}.
+%% 
+%% \bibitem{charmpp}
+%% L.~V. Kale and S.~Krishnan.
+%% \newblock Charm++: Parallel programming with message-driven objects.
+%% \newblock In {\em Parallel Programming using C++, G. V. Wilson and P. Lu,
+%%   editors}, pages 175--213. MIT Press, 1996.
+%% 
+%% \bibitem{LI:MpiDataUMR}
+%% M.~Li, H.~Subramoni, K.~Hamidouche, X.~Lu, and D.~K. Panda.
+%% \newblock High performance mpi datatype support with user-mode memory
+%%   registration: Challenges, designs, and benefits.
+%% \newblock In {\em 2015 IEEE International Conference on Cluster Computing},
+%%   pages 226--235, Sept 2015.
+%% 
+%% \bibitem{Liu:2003:OMP-SPMD}
+%% Zhenying Liu, Barbara Chapman, Tien-Hsiung Weng, and Oscar Hernandez.
+%% \newblock Improving the performance of openmp by array privatization.
+%% \newblock In {\em Proceedings of the OpenMP Applications and Tools 2003
+%%   International Conference on OpenMP Shared Memory Parallel Programming},
+%%   WOMPAT'03, pages 244--259, Berlin, Heidelberg, 2003. Springer-Verlag.
+%% 
+%% \bibitem{thakur:ijhpca-sync}
+%% R.~Thakur, W.~Gropp, and B.~Toonen.
+%% \newblock Optimizing the synchronization operations in {MPI} one-sided
+%%   communication.
+%% \newblock {\em Int'l Journal of High Performance Computing Applications},
+%%   19:119--128, 2005.
+
+\end{thebibliography}

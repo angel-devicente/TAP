@@ -1,0 +1,8 @@
+  \label{ex:countdownop}
+  Redo exercise~\ref{ex:countdown} using \indexmpishow{MPI_Fetch_and_op}. The
+  problem is again to make sure all processes have the same view of
+  the shared counter.
+
+  Does it work to make the fetch-and-op conditional? Is there a way to
+  do it unconditionally? What should the `break' test be, seeing that
+  multiple processes can update the counter at the same time?

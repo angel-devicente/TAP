@@ -1,0 +1,2 @@
+    This is one occasion where you could use \n{ibrun -np 9};
+    normally you would \emph{never} put a processor count on \n{ibrun}.

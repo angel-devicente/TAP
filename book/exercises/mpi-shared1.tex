@@ -1,0 +1,9 @@
+  \label{ex:shareddata}
+  Let the `shared' data originate on process zero in
+  \indexmpishow{MPI_COMM_WORLD}. Then:
+  \begin{itemize}
+  \item create a communicator per shared memory domain;
+  \item create a communicator for all the processes with number zero on their
+    node;
+  \item broadcast the shared data to the processes zero on each node.
+  \end{itemize}
