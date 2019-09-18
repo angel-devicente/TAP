@@ -21,9 +21,16 @@
 % To be able to include pages from other pdf's
 \usepackage{pdfpages,hyperref}
 
+% To be able to use patchcmd
+\usepackage{etoolbox}
+
 \usepackage{verbatim}
 \makeatletter
 \def\verbatim@startline{\verbatim@line{\leavevmode\kern\unitindent\relax}}
+\patchcmd{\@verbatim}
+  {\verbatim@font}
+  {\verbatim@font\scriptsize}
+  {}{}
 \makeatother
 
 \usepackage{comment}

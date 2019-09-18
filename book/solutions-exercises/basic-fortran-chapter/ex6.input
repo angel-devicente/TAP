@@ -1,0 +1,23 @@
+9     ! n - number of employees
+3     ! nc - number of categories
+10500 ! salaries of each employee (n lines)
+16140
+22300
+15960
+14150
+12180
+13230
+15760
+31000
+1     ! category of each employee (n lines)
+2
+3
+2
+1
+1
+1
+2
+3
+5     ! increase (percentage) for each category
+4
+2
