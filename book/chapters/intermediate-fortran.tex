@@ -24,35 +24,57 @@ concepts.
 \Level 0 {Recursion exercises}
 \label{sec:recursion-exercises}
 
+You can find solutions to these exercises in section
+\ref{app:sol-intermediate-fortran}, but you are \emph{highly encouraged} to try to solve
+them first on your own.
+
+A useful blog about recursion: \url{https://blog.angularindepth.com/learn-recursion-in-10-minutes-e3262ac08a1}
+
+
+\Level 1 {Recursive Fibonacci function}
+\label{ex:rec-fib}
+
+Write a recursive function to calculate the Fibonacci numbers
+\url{https://en.wikipedia.org/wiki/Fibonacci_number}
+
+\Level 1 {Non-Recursive Fibonacci function}
+\label{ex:nonrec-fib}
+
+Write a non-recursive version of the function above and compare the execution
+times of both versions for larger 'n' values (for example from 30-45). In Linux
+you can check the execution time with the command 'time', for example:
+
 \begin{verbatim}
+time ./fibo_r 30
+\end{verbatim}
 
-1) Write a recursive function to calculate the Fibonacci numbers
- (https://en.wikipedia.org/wiki/Fibonacci_number)
+\Level 1 {Memoized Recursive Fibonacci function}
+\label{ex:memo_rec-fib}
 
-2) Write a non-recursive version of the function above and compare the execution
- times of both versions for larger 'n' values (for example from 30-45). In Linux
- you can check the execution time with the command 'time' (for example: "time
- ./fibo_r 30").
+Most probably, your recursive implementation is much slower than the iterative
+version. Can you guess what is going on? [Modify the recursive routine to count
+  the number of times that the fibonacci function is called. Then, look for
+  information on "memoization" and try to modify the recursive routine so that
+  you still use recursion, but in a way that it is as efficient as the iterative
+  version. 
 
-3) Most probably, your recursive implementation is much slower than the
- iterative version. Can you guess what is going on? [Modify the recursive
- routine to count the number of times that the fibonacci function is
- called. Then, look for information on "memoization" and try to modify the
- recursive routine so that you still use recursion, but in a way that it is as
- efficient as the iterative version.
+\Level 1 {Pseudo-code for printing a Binary Search Tree}
+\label{ex:rec-bst}
 
-4) Write pseudo-code, that is, without paying attention to the syntax of
+Write pseudo-code, that is, without paying attention to the syntax of
  Fortran, a recursive function to print in ascending order a Binary Search Tree
- (https://en.wikipedia.org/wiki/Binary_search_tree). You can assume that your
+ (\url{https://en.wikipedia.org/wiki/Binary_search_tree}). You can assume that your
  function will be given a tree estructure called "tree", and that these
- functions are provided to you: left_branch_exists(tree), which will return TRUE
- is "tree" has a left branch, right_branch_exists(tree), left_branch(tree),
- which will return the left branch of the tree, right_branch(tree), and
- node_value(tree), which will return the value stored in the root node of the
+ functions are provided to you: left\_branch\_exists(tree), which will return TRUE
+ is "tree" has a left branch, right\_branch\_exists(tree), left\_branch(tree),
+ which will return the left branch of the tree, right\_branch(tree), and
+ node\_value(tree), which will return the value stored in the root node of the
  tree "tree".
 
-5) Try to solve the Tower of Hanoi game:
- https://en.wikipedia.org/wiki/Tower_of_Hanoi
+\Level 1 {Tower of Hanoi game}
+\label{ex:rec-hanoi}
+
+Try to solve the Tower of Hanoi game \url{https://en.wikipedia.org/wiki/Tower_of_Hanoi}
 
  This is more difficult than the previous exercises, but it shows very nicely how
  useful recursion is in some cases. You assume that you have a pile of pieces
@@ -62,7 +84,7 @@ concepts.
  details of Fortran. But this one is perfectly doable with the little Fortran we
  have learnt so far, so you could try to go for a full implementation.
 
- In the page https://www.mathsisfun.com/games/towerofhanoi.html you can see a
+ In the page \url{https://www.mathsisfun.com/games/towerofhanoi.html} you can see a
  demonstration of how to solve the puzzle and you can try to solve it by hand. A
  basic implementation to solve this problem is very easy, just needing a routine
  that prints the necessary movements to solve the puzzle (we do not need to
@@ -70,12 +92,15 @@ concepts.
  game. When executing the code, we could just print the number of moves, where
  each move has the following format:
 
+\begin{verbatim} 
  n (f -> t)
+\end{verbatim} 
 
  where n is the piece number to move (1 is the smalles piece), f is the column
  whence the piece is coming, and t is the column where the piece is going
  to. For example:
 
+\begin{verbatim} 
 $ ./hanoi
  Enter number of pieces
 3
@@ -86,35 +111,47 @@ $ ./hanoi
            1 (           2  ->            1 )
            2 (           2  ->            3 )
            1 (           1  ->            3 )
+\end{verbatim} 
 
-$ ./hanoi
- Enter number of pieces
-4
-           1 (           1  ->            2 )
-           2 (           1  ->            3 )
-           1 (           2  ->            3 )
-           3 (           1  ->            2 )
-           1 (           3  ->            1 )
-           2 (           3  ->            2 )
-           1 (           1  ->            2 )
-           4 (           1  ->            3 )
-           1 (           2  ->            3 )
-           2 (           2  ->            1 )
-           1 (           3  ->            1 )
-           3 (           2  ->            3 )
-           1 (           1  ->            2 )
-           2 (           1  ->            3 )
-           1 (           2  ->            3 )
+\Level 1 {Recursive travelling salesman problem}
+\label{ex:rec-tsp}
 
-6) In section 2.2.7, we looked at the Travelling Salesman Problem, but fixing it
+In section \ref{ex:basic-tsp} we looked at the Travelling Salesman Problem, but fixing it
  at 5 cities. Think about (and if possible implement) a recursive version that
  would work for any number of cities. If you understand how to write this one,
  then you are doing fantastic progress with recursion, as it gets a bit tricky
  to keep track of visited cities. If you don't get it at all, don't panic, we
  will see a solution in class.
-\end{verbatim}
 
 
+\Level 1 {Contained digits}
+\label{ex:rec-elf}
+
+Write a recursive function that given two numbers: N1, N2, will say if all the
+digits in N1 are contained in number N2.
+
+For example, given (101,231001), we should return TRUE, since all digits in 101
+are contained in 231001.
+
+\Level 1 {Permutations of a number}
+\label{ex:rec-perm}
+
+Write a recursive subroutine that given a number N1, will print all possible
+permutations of its digits. Assume for simplicity that N1 has no repeating
+digits, and before you call the recursive subroutine place all the digits of N1
+in an array. You can also use any other auxiliary arrays or scalars to keep
+track of the permutations you have covered so far.
+
+\Level 1 {8 queens problem}
+\label{ex:rec-queens}
+
+Try to find a way to solve the 8-queens puzzle (see
+\url{https://en.wikipedia.org/wiki/Eight_queens_puzzle}). As always, start
+without worrying about the implementation and just think about how you could
+solve this problem (size = 8), assuming you could solve a smaller problem
+(e.g. size = 7).
+
+ 
 \Level 0 {Pointers and derived types}
 {\includepdf[frame=true,scale=0.98,pages={2-21}]{graphics/pointers_derived_types.pdf}}
 

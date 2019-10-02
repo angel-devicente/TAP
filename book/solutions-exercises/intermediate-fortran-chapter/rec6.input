@@ -1,0 +1,6 @@
+5                      ! n - number of towns
+0   120 180 202 300    ! n lines, each line indicating the distances from town i [1:5]
+120 0   175 340 404    !          to all towns j [1:5]
+180 175 0   98  56
+202 340 98  0   168
+300 404 56  168 0

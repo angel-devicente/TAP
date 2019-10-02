@@ -1,0 +1,6 @@
+RECURSIVE SUBROUTINE print_sorted (tree)
+  IF (left_branch_exists(tree)) print_sorted(left_branch(tree))
+  PRINT*, node_value(tree)
+  IF (right_branch_exists(tree)) print_sorted(right_branch(tree))
+END print_sorted
+

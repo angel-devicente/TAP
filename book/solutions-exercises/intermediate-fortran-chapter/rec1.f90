@@ -1,0 +1,23 @@
+PROGRAM Fibo
+  IMPLICIT NONE
+
+  INTEGER, PARAMETER :: min = 35, max = 40
+  INTEGER :: i
+
+  DO i = min,max
+     PRINT*, i, "-->", fibonacci(i)
+  END DO
+  
+CONTAINS
+  
+  RECURSIVE FUNCTION FIBONACCI(N) RESULT (FIBO_RESULT)
+    INTEGER, INTENT(IN)      :: N
+    INTEGER                  :: FIBO_RESULT
+    IF ( N <= 2 ) THEN
+       FIBO_RESULT = 1
+    ELSE
+       FIBO_RESULT = FIBONACCI(N-1) + FIBONACCI(N-2)
+    END IF
+  END FUNCTION FIBONACCI
+  
+END PROGRAM Fibo
