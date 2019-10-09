@@ -192,5 +192,292 @@ value 17.
 \Level 0 {Pointers and recursion exercises}
 \label{sec:pointers-recursion-exercises}
 
+\Level 1 {Bi-directional list}
+\label{ex:point-rec-bidirectional}
+
+Modify the example ``Practical Example of Linked Lists'' in the slides, so that
+the list will have links both to the previous and to the next element. Also
+create a recursive subroutine that will print the list both forward and
+backwards. You will have to take decisions, as to how many temporary pointers
+you need, etc. You are free to do it in any way, as far as the list is properly
+formed (i.e. it has links to the previous and next elements, and the ends of the
+list are signalled with a pointer to NULL), and the routines for printing are
+able to print the whole list forward and backwards.
+
+\Level 1 {Sorted bi-directional list}
+\label{ex:point-rec-sorted-bidirectional}
+
+Modify exercise \ref{ex:point-rec-bidirectional} so that the elements are
+inserted in the list sorted.
+
+\Level 1 {Sort numbers with a Binary Search Tree}
+\label{ex:point-rec-bst}
+
+In this exercise we are going to build a binary search tree and then print the
+tree (remember that we already solved with pseudo-code how to print a binary
+search tree so that its elements will be printed sorted). The node structure is
+basically the same as in exercise \ref{ex:point-rec-sorted-bidirectional}, but
+now, instead of ``previous'' and ``next'', think of ``left'' and ``right''. So
+first you will have to think of a procedure that will create the tree and then
+another one to print the tree. Think carefully what you need, and above all make
+sure that you never leave a node ``unattended'' (i.e. that you don't create
+memory leaks by creating nodes and then deleting all pointers to it).
+
+To make it easier, use this main code as a template, and just fill in the
+routines ``place\_number'', and ``Print''. We don't want to deal with repeated
+numbers, so if you give a repeated number, the procedure place\_number should
+just ignore it and print a warning message.
+
+\begin{verbatim}
+PROGRAM listas
+IMPLICIT NONE
+
+TYPE CELL
+INTEGER :: val
+TYPE (CELL), POINTER :: left,right
+END TYPE CELL
+
+TYPE (CELL), POINTER :: head
+INTEGER :: n,k,i
+
+READ*, n
+
+READ*, k
+ALLOCATE(head)
+head%val = k
+NULLIFY(head%left)
+NULLIFY(head%right)
+
+DO i=2,n
+READ*, k
+CALL place_number(head,k)
+END DO
+
+CALL Print(head)
+
+CONTAINS 
+RECURSIVE SUBROUTINE place_number(node,number)
+???
+END SUBROUTINE place_number
+
+RECURSIVE SUBROUTINE Print (node) 
+???
+END SUBROUTINE Print
+
+END PROGRAM listas
+\end{verbatim}
+
+And remember to use input redirection so that you don't have to type in the
+numbers everytime you run the code. For example, with the following
+``numeros.txt'' file you could run the code as:
+
+\begin{verbatim}
+[angelv@nodo1]$ cat numbers.txt
+10
+6
+3
+15
+2
+7
+2
+5
+4
+21
+31
+
+[angelv@nodo1]$ ./tree < numbers.txt
+INSERTING NUMBERS
+-----------------
+Repeated number 2, item ignored!
+
+PRINTING BST
+------------
+2
+3
+4
+5
+6
+7
+15
+21
+31
+[angelv@nodo1]$
+\end{verbatim}
+
+\Level 1 {Counting number of elements of a Binary Search Tree}
+\label{ex:point-rec-nnodes-bst}
+Add a function to the exercise \ref{ex:point-rec-bst}, that will return the
+number of elements in a BST.
+
+\Level 1 {Calculating the depth of a Binary Search Tree}
+\label{ex:point-rec-depth-bst}
+Add a function to the exercise \ref{ex:point-rec-bst}, that will return the
+depth of a BST. An individual node would be depth=1, if this node has at least
+one child node, then it would be depth=2, if it has ``grandchildren'', then it
+would be depth=3, etc.
+
+\Level 1 {Deleting a node in a Binary Search Tree -- DIFFICULT}
+\label{ex:point-rec-depth-bst}
+
+Add a function to the exercise \ref{ex:point-rec-bst}, that given a tree and a
+number, it will delete the node with value==number (if it exists in the tree).
+
+Before you try to code anything, you will have to make sure that you understand
+the algorithm to delete the node, which you can check at
+\url{https://en.wikipedia.org/wiki/Binary_search_tree#Deletion}
+
+
+%% 7) (DIFÍCIL) Vamos a escribir una aplicación para buscar información
+%% referente a viajes en avión y vamos a ver como usar arrays tradicionales no nos
+%% servirá, debido a los grandes números a manejar. En el mundo hay aproximádamente
+%% 18.000 aeropuertos comerciales
+%% (http://www.aeronewstv.com/en/lifestyle/in-your-opinion/2954-how-many-commercial-airports-are-there-in-the-world.html)
+%% y 5.000 aerolíneas (https://en.wikipedia.org/wiki/Lists_of_airlines). Si
+%% quisiésemos representar todas las posibles combinaciones de vuelos entre las
+%% distintas ciudades necesitaríamos un array de booleanos de tamaño
+%% 18.000x18.000x5.000 (1.62e12), que ocuparía approx. 1.600 GB!
+%% 
+%% Como la mayoría de las combinaciones posibles simplemente no existirán, tenemos
+%% que implementar algo parecido a una "sparse matrix", dónde solo almacenaremos
+%% información sobre las combinaciones de vuelos que realmente existen. Como
+%% ejemplo concreto, nuestro fichero de entrada podría ser:
+%% 
+%% 10 5000              ! 10 airports  5000 airlines
+%% 2 10 4999 34.0       ! origin destination ariline price
+%% 1 3 4002 5.0
+%% 1 2 4003 4.0
+%% 2 1 4010 34.0
+%% 1 10 4010 200.0
+%% 0 0 0 0
+%% 
+%% La primera línea nos indicará el número de aeropuertos (en este caso 10) y el
+%% número de aerolíneas (en este caso 5000). El código tiene que poder funcionar
+%% para cualquier número (razonable) de aeropuertos y compañías aereas. Las
+%% siguientes líneas tienen cuatro números: id_origen id_destino id_aerolínea
+%% precio. Esta información indica que existe un vuelo desde el aeropuerto
+%% "id_origen" a "id_destino", volando con la compañía "id_aerolínea" y con un
+%% coste de "precio". Una línea con todos los valores a 0 indica el final de los
+%% datos.
+%% 
+%% Toda esta información la podemos almacenar en memoria como un array de
+%% listas. Por ejemplo, para el fichero concreto de arriba, podríamos almacenarlo
+%% como un array de tamaño el número de aeropuertos, donde cada elemento del array
+%% apunta a una lista, donde cada elemento de la lista tiene la información sobre
+%% cada conexión posible (i.e. aeropuerto de destino, aerolínea y precio).
+%% 
+%% ------
+%% |  1 | [(3,4002,5.0),(2,4003,4.0),(10,4010,200.0)]
+%% |  2 | [(10,4999,34.0),(1,4010,34.0)]
+%% |  3 | []
+%% |  4 | []
+%% |  5 | []
+%% |  6 | []
+%% |  7 | []
+%% |  8 | []
+%% |  9 | []
+%% | 10 | []
+%% ------
+%% 
+%% Para construir esta estructura en Fortran, necesitaréis un array de punteros,
+%% pero recordad que esto no se puede hacer en Fortran, así que necesitamos el
+%% apaño de crear un tipo derivado (en este caso CPtr) cuyo único componente es un
+%% puntero al tipo de datos que cada elemento de nuestra lista va a tener. Para
+%% concretar, la parte de declaración de variables podría ser algo así:
+%% 
+%% ,----
+%% | PROGRAM p1
+%% |   IMPLICIT NONE
+%% |   
+%% |   TYPE nodo_con
+%% |      INTEGER :: destination,airline
+%% |      REAL    ::    price
+%% |      TYPE(nodo_con), POINTER :: next
+%% |   END type nodo_con
+%% |   
+%% |   TYPE CPtr
+%% |      TYPE(nodo_con), POINTER :: nodo
+%% |   END type CPtr
+%% | 
+%% |   TYPE(CPtr), ALLOCATABLE, DIMENSION(:) :: nodes
+%% `----
+%% 
+%% Ahora vuestra tarea consiste en escribir el código para leer el fichero de
+%% entrada, construir la estructura de datos representando los vuelos disponibles
+%% y verificar que los datos se han almacenado correctamente. Además, querremos
+%% implementar las siguientes funciones:
+%% 
+%% a) Generar para cada aerolínea la lista de todos sus vuelos (no imprimir
+%% información para aerolíneas que no tengan ningún vuelo)
+%% 
+%% b) Dados un origen y un destino, ver si existe la posibilidad de viajar desde
+%% origen a destino y decir el número de aviones (mínimo) que tendríamos que coger
+%% para hacer el viaje.
+%% 
+%% c) Dado un origen y un precio máximo decir a todos los destinos que podríamos
+%% viajar sin sobrepasar el presupuesto dado.
+%% 
+%% 
+%% Como ejemplo de una ejecución posible (con las combinaciones de vuelos según lo
+%% indicado arriba) de un código que implementa todas las funciones descritas
+%% arriba podríamos tener:
+%% 
+%% ,----
+%% | angelv@carro:~/Downloads$ ./p1 < p1.txt
+%% |  BULDING GRAPH
+%% |
+%% |
+%% |  
+%% |  CHECKING GRAPH
+%% |  Conexiones aeropuerto           1
+%% |           10        4010   200.0000    
+%% |            2        4003   4.000000    
+%% |            3        4002   5.000000    
+%% |  Conexiones aeropuerto           2
+%% |            1        4010   34.00000    
+%% |           10        4999   34.00000    
+%% |  
+%% |
+%% |
+%% |  CHECKING flights of all airlines
+%% |  Connections for airline        4002
+%% |            1           3        4002   5.000000    
+%% |  Connections for airline        4003
+%% |            1           2        4003   4.000000    
+%% |  Connections for airline        4010
+%% |            1          10        4010   200.0000    
+%% |            2           1        4010   34.00000    
+%% |  Connections for airline        4999
+%% |            2          10        4999   34.00000    
+%% |
+%% |
+%% |  
+%% |  FINDING possible routes (enter A B, anyone 0 to end)
+%% |  Checking possible route. Origin:           1 Destination:           3
+%% |  Destination possible with number of hops:           1
+%% |  
+%% |  Checking possible route. Origin:           1 Destination:          10
+%% |  Destination possible with number of hops:           1
+%% |  
+%% |  Checking possible route. Origin:           2 Destination:          10
+%% |  Destination possible with number of hops:           1
+%% |  
+%% |  Checking possible route. Origin:           2 Destination:           3
+%% |  Destination possible with number of hops:           2
+%% |  
+%% |  Checking possible route. Origin:           2 Destination:           4
+%% |  Destination NOT POSSIBLE
+%% |  
+%% |
+%% |  
+%% |  FINDING possible cheap destinations (enter A price, any 0 to end)
+%% |  Checking route. Origin:           1 Maximum price:   4.500000    
+%% |  Destination:           2 for:   4.000000    
+%% |  
+%% |  Checking route. Origin:           1 Maximum price:   40.00000    
+%% |  Destination:           2 for:   4.000000    
+%% |  Destination:           3 for:   5.000000    
+%% |  Destination:          10 for:   38.00000    
+%% `----
+%% \end{verbatim}
 
 
