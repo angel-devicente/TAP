@@ -1,4 +1,4 @@
-PROGRAM listas
+PROGRAM sortedbidirectional
   IMPLICIT NONE
 
   TYPE CELL
@@ -14,24 +14,46 @@ PROGRAM listas
   head%val = 0
   NULLIFY(head%prev)
   NULLIFY(head%next)
-  curr => head
 
-  PRINT*, "Cuantos valores?"
+  PRINT*, "Input number of elements in the list"
   READ*, n
-
+  
+  PRINT*, "Now enter", n, " elements"
   DO i=1,n
      READ*, k
      ALLOCATE(temp)
      temp%val = k
      NULLIFY(temp%prev)
      NULLIFY(temp%next)
-     curr%next => temp
-     temp%prev => curr
 
-     curr => temp
+     curr => head
+     DO 
+        IF (ASSOCIATED(curr%next)) THEN
+           IF (curr%next%val .GE. k) THEN
+              EXIT
+           ELSE
+              curr => curr%next
+           END IF
+        ELSE
+           EXIT
+        END IF
+     END DO
+
+     IF (ASSOCIATED(curr%next)) THEN
+        curr%next%prev => temp
+     END IF
+     temp%next => curr%next
+     temp%prev => curr
+     curr%next => temp
+
   END DO
 
 PRINT*, " Backwards..."
+curr => head
+DO
+   IF (.NOT. ASSOCIATED(curr%next)) EXIT
+   curr => curr%next
+END DO
 CALL Print (curr,0)
 
 PRINT*, " Forward..."
@@ -49,4 +71,4 @@ CONTAINS
     
   END SUBROUTINE Print
   
-END PROGRAM listas
+END PROGRAM sortedbidirectional

@@ -37,4 +37,151 @@
 \listing{pointer3.f90}{solutions-exercises/intermediate-fortran-chapter/pointer3.f90}
 
 
+\subsection{Solution to exercise \ref{ex:point-rec-bidirectional}}
+\listing{bidirectional.f90}{solutions-exercises/intermediate-fortran-chapter/pointer-recursion/bidirectional.f90}
+
+\subsection{Solution to exercise \ref{ex:point-rec-sorted-bidirectional}}
+\listing{sortedbidirectional.f90}{solutions-exercises/intermediate-fortran-chapter/pointer-recursion/sortedbidirectional.f90}
+
+\subsection{Solution to exercise \ref{ex:point-rec-bst}}
+\listing{bst.f90}{solutions-exercises/intermediate-fortran-chapter/pointer-recursion/bst.f90}
+
+\subsection{Solution to exercise \ref{ex:point-rec-nnodes-bst}}
+\begin{verbatim}
+  RECURSIVE FUNCTION numelem(node) RESULT (num)
+    TYPE (CELL), POINTER :: node
+    INTEGER :: num
+
+    num = 1
+    
+    IF (ASSOCIATED(node%left)) num = num + numelem(node%left)
+    IF (ASSOCIATED(node%right)) num = num + numelem(node%right)
+  END FUNCTION numelem
+\end{verbatim}
+
+\subsection{Solution to exercise \ref{ex:point-rec-depth-bst}}
+\begin{verbatim}
+  RECURSIVE FUNCTION depth(node) RESULT (num)
+    TYPE (CELL), POINTER :: node
+    INTEGER :: num, dleft, dright
+
+    IF (ASSOCIATED(node%left)) THEN
+       dleft = depth(node%left)
+    ELSE
+       dleft = 0
+    END IF
+
+    IF (ASSOCIATED(node%right)) THEN
+       dright = depth(node%right)
+    ELSE
+       dright = 0
+    END IF
+
+    IF (dleft .GT. dright) THEN
+       num = 1+dleft
+    ELSE
+       num = 1+dright
+    END IF
+  END FUNCTION depth
+\end{verbatim}
+
+
+\subsection{Solution to exercise \ref{ex:point-rec-delete-node-bst}}
+\begin{verbatim}
+  RECURSIVE FUNCTION in_order_successor(node) RESULT (tnode)
+    TYPE (CELL), POINTER :: node,tnode
+    
+    IF (ASSOCIATED(node%left)) THEN
+       tnode => in_order_successor(node%left)
+    ELSE
+       tnode => node
+    END IF
+
+  END FUNCTION in_order_successor
+
+  RECURSIVE FUNCTION get_parent (node,number) RESULT (tnode)
+    TYPE (CELL), POINTER :: node,tnode
+    INTEGER :: number
+
+    IF (number .LT. node%val) THEN
+       IF (node%left%val .EQ. number) THEN 
+          tnode => node
+       ELSE 
+          tnode => get_parent(node%left,number)
+       END IF
+    ELSE
+       IF (node%right%val .EQ. number) THEN 
+          tnode => node
+       ELSE 
+          tnode => get_parent(node%right,number)
+       END IF
+    END IF
+  END FUNCTION get_parent
+
+  RECURSIVE SUBROUTINE delete(head,number)
+    TYPE (CELL), POINTER :: head, parent, node, successor
+    INTEGER :: number, exchange
+
+    parent => get_parent(head,number)
+
+    !! Find the node to actually delete
+    IF (ASSOCIATED(parent%left)) THEN
+       IF (parent%left%val .EQ. number) THEN
+          node => parent%left
+       ELSE
+          node => parent%right
+       END IF
+    ELSE
+       node => parent%right
+    END IF
+
+    !! Do the actual delete
+    IF (.NOT. ASSOCIATED(node%left) .AND. .NOT. ASSOCIATED(node%right)) THEN
+       !! The easiest. This is a leaf
+       IF (ASSOCIATED(parent%left)) THEN
+          IF (parent%left%val .EQ. number) THEN
+             NULLIFY(parent%left)
+          ELSE
+             NULLIFY(parent%right)
+          END IF
+       ELSE
+          NULLIFY(parent%right)
+       END IF
+       DEALLOCATE(node)
+    ELSEIF (.NOT. ASSOCIATED(node%left)) THEN
+       !! There is right branch
+       IF (ASSOCIATED(parent%left)) THEN
+          IF (parent%left%val .EQ. number) THEN
+             parent%left => node%right
+          ELSE
+             parent%right => node%right
+          END IF
+       ELSE
+          parent%right => node%right
+       END IF
+       DEALLOCATE(node)
+    ELSEIF (.NOT. ASSOCIATED(node%right)) THEN
+       !! There is left branch
+       IF (ASSOCIATED(parent%left)) THEN
+          IF (parent%left%val .EQ. number) THEN
+             parent%left => node%left
+          ELSE
+             parent%right => node%left
+          END IF
+       ELSE
+          parent%right => node%left
+       END IF
+       DEALLOCATE(node)
+    ELSE
+       !! most general case
+       successor => in_order_successor(node%right)
+       exchange = successor%val
+       CALL delete(head,exchange)
+       node%val = exchange
+    END IF
+    
+  END SUBROUTINE delete
+\end{verbatim}
+
+
 

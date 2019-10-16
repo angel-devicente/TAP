@@ -1,4 +1,4 @@
-PROGRAM listas
+PROGRAM bst
   IMPLICIT NONE
 
   TYPE CELL
@@ -9,7 +9,9 @@ PROGRAM listas
   TYPE (CELL), POINTER :: head
   INTEGER              :: n,k,i
 
+  PRINT*, "Input number of elements in the list"
   READ*, n
+  PRINT*, "Now enter", n, " elements"
 
   READ*, k
   ALLOCATE(head)
@@ -50,7 +52,7 @@ CONTAINS
           NULLIFY(temp%right)
        END IF
     ELSE
-       PRINT*, "No se admiten numeros repetidos, ignorando el numero ",number, " !"
+       PRINT*, "Repeated numbers not allowed, ignoring: ",number, " !"
     END IF
   END SUBROUTINE place_number
   
@@ -63,4 +65,4 @@ CONTAINS
     
   END SUBROUTINE Print
   
-END PROGRAM listas
+END PROGRAM bst

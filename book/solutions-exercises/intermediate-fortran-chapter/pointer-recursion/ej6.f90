@@ -23,7 +23,7 @@ PROGRAM practica
 
   CALL Print(head)
 
-  CALL borra(head,3)
+  CALL delete(head,3)
 
   CALL Print(head)
 
@@ -59,7 +59,7 @@ CONTAINS
     END IF
   END FUNCTION get_parent
 
-  RECURSIVE SUBROUTINE borra(head,number)
+  RECURSIVE SUBROUTINE delete(head,number)
     TYPE (CELL), POINTER :: head, parent, node, successor
     INTEGER :: number, exchange
 
@@ -90,7 +90,7 @@ CONTAINS
        END IF
        DEALLOCATE(node)
     ELSEIF (.NOT. ASSOCIATED(node%left)) THEN
-       !! tiene arbol derecho
+       !! There is right branch
        IF (ASSOCIATED(parent%left)) THEN
           IF (parent%left%val .EQ. number) THEN
              parent%left => node%right
@@ -102,7 +102,7 @@ CONTAINS
        END IF
        DEALLOCATE(node)
     ELSEIF (.NOT. ASSOCIATED(node%right)) THEN
-       !! tiene arbol izquierdo
+       !! There is left branch
        IF (ASSOCIATED(parent%left)) THEN
           IF (parent%left%val .EQ. number) THEN
              parent%left => node%left
@@ -114,14 +114,14 @@ CONTAINS
        END IF
        DEALLOCATE(node)
     ELSE
-       !! el caso general
+       !! most general case
        successor => in_order_successor(node%right)
        exchange = successor%val
-       CALL borra(head,exchange)
+       CALL delete(head,exchange)
        node%val = exchange
     END IF
     
-  END SUBROUTINE borra
+  END SUBROUTINE delete
 
 
   RECURSIVE SUBROUTINE place_number(node,number)
