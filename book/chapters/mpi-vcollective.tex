@@ -89,21 +89,21 @@ int MPI_Allgatherv
 We use \indexmpishow{MPI_Gatherv} to do an irregular gather onto a root. We first need an
 \indexmpishow{MPI_Gather} to determine offsets.
 %
-\cverbatimsnippet{gatherv}
+%\cverbatimsnippet{gatherv}
 %
-\pverbatimsnippet{gathervp}
+%\pverbatimsnippet{gathervp}
 
 \Level 1 {Example of Allgatherv}
 
 Prior to the actual gatherv call, we need to construct the count and
 displacement arrays. The easiest way is to use a reduction.
 
-\cverbatimsnippet{allgathervc}
+%\cverbatimsnippet{allgathervc}
 
 In python the receive buffer has to contain the counts and
 displacements arrays.
 
-\pverbatimsnippet{allgathervp}
+%\pverbatimsnippet{allgathervp}
 
 \Level 1 {Variable all-to-all}
 

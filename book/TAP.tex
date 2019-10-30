@@ -271,10 +271,17 @@
 
 %% \part{MPI}
 %% 
-%% \CHAPTER{Getting started with MPI}{mpi-started}
-%% \CHAPTER{MPI topic: Functional parallelism}{mpi-functional}
-%% \CHAPTER{MPI topic: Collectives}{mpi-collective}
-%% \CHAPTER{MPI topic: Point-to-point}{mpi-ptp}
+
+% The following, after a good review/reduction, should make a nice textbook
+% stuff for our course.
+%\CHAPTER{Getting started with MPI}{mpi-started}
+%\CHAPTER{MPI topic: Functional parallelism}{mpi-functional}
+%\CHAPTER{MPI topic: Collectives}{mpi-collective}
+%\CHAPTER{MPI topic: Point-to-point}{mpi-ptp}
+\CHAPTER{Getting started with MPI}{mpi-slides}
+\CHAPTER{MPI collective operations}{mpi-collectives}
+\CHAPTER{Barnes-Hut code in parallel}{barnes-hut-mpi-code.tex}
+
 %% \CHAPTER{MPI topic: Data types}{mpi-data}
 %% \CHAPTER{MPI topic: Communicators}{mpi-comm}
 %% \CHAPTER{MPI topic: Process management}{mpi-proc}
@@ -337,21 +344,29 @@
 \Level 0 {Solutions to exercises}
 \APPENDIX{Exercises in section \ref{sec:basic-fortran-exercises}}{sol-basic-fortran}{sol-basic-fortran}
 \APPENDIX{Exercises in section \ref{sec:recursion-exercises}}{sol-intermediate-fortran}{sol-intermediate-fortran}
+\APPENDIX{Exercises in section \ref{sec:basic-mpi-exercises}}{sol-basic-mpi}{sol-basic-mpi}
+\APPENDIX{Exercises in section \ref{sec:collective-mpi-exercises}}{sol-collective-mpi}{sol-collective-mpi}
 
+\Level 0 {Barnes-Hut Algorithm}
 \APPENDIX{Barnes-Hut original paper in Nature}{nature-nbody}{nature-nbody}
+
 %% \TUTORIAL{Debugging}{debug} % VLE is this the same as gnudebug in scicompbook?
 %% \TUTORIAL{Tracing}{tau}
 %% \TUTORIAL{SimGrid}{simgrid}
 %%  
-%% \part{Projects, index}
-%%  
-%% \Level 0 {Class projects}
-%%  
-%% \SetBaseLevel 1
-%% \input projects/mpiprojects
-%% \SetBaseLevel 0
-%% \PROJECT{A Style Guide to Project Submissions}{projectstyle}
-%% \PROJECT{Warmup Exercises}{warmup}
+
+\part{Projects}
+  
+\Level 0 {Class projects}
+  
+%\SetBaseLevel 1
+%\input projects/mpiprojects
+\SetBaseLevel 0
+\PROJECT{Project A - Genealogy project (pointers and recursion)}{genealogy}
+\PROJECT{Project B - RT-like (MPI)}{rt-like}
+
+%\PROJECT{A Style Guide to Project Submissions}{projectstyle}
+%\PROJECT{Warmup Exercises}{warmup}
 %% \PROJECT{Mandelbrot set}{mandelbrot}
 %% \PROJECT{Data parallel grids}{grid}
 %% \PROJECT{N-body problems}{nbody}

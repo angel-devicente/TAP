@@ -56,12 +56,12 @@
 %% \newblock {SimGrid} homepage.
 %% \newblock \url{http://simgrid.gforge.inria.fr/}.
 %% 
-%% \bibitem{charmpp}
-%% L.~V. Kale and S.~Krishnan.
-%% \newblock Charm++: Parallel programming with message-driven objects.
-%% \newblock In {\em Parallel Programming using C++, G. V. Wilson and P. Lu,
-%%   editors}, pages 175--213. MIT Press, 1996.
-%% 
+\bibitem{charmpp}
+L.~V. Kale and S.~Krishnan.
+\newblock Charm++: Parallel programming with message-driven objects.
+\newblock In {\em Parallel Programming using C++, G. V. Wilson and P. Lu,
+  editors}, pages 175--213. MIT Press, 1996.
+
 %% \bibitem{LI:MpiDataUMR}
 %% M.~Li, H.~Subramoni, K.~Hamidouche, X.~Lu, and D.~K. Panda.
 %% \newblock High performance mpi datatype support with user-mode memory

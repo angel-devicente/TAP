@@ -87,7 +87,7 @@ There are some restrictions on the user function:
 For example, here is an operator for finding the smallest non-zero
 number in an array of nonnegative integers:
 %
-\cverbatimsnippet{mpirwz}
+%\cverbatimsnippet{mpirwz}
 
 \begin{exercise}
   \label{ex:one-norm-op}
@@ -209,7 +209,7 @@ time that would result from a blocking barrier. In the following code
 fragment processes test for completion of the barrier, and failing to
 detect such completion, perform some local work.
 
-\cverbatimsnippet{ibarrierpoll}
+%\cverbatimsnippet{ibarrierpoll}
 
 \Level 0 {Performance of collectives}
 
@@ -323,15 +323,15 @@ switch(rank) {
 }
 The most logical execution is:\par\medskip
 
-\includegraphics[scale=.35]{backintime1}
+\includegraphics[scale=.35]{graphics/backintime1}
 
 However, this ordering is allowed too:\par\medskip
 
-\includegraphics[scale=.35]{backintime2}
+\includegraphics[scale=.35]{graphics/backintime2}
 
 Which looks from a distance like:\par\medskip
 
-\includegraphics[scale=.35]{backintime3}
+\includegraphics[scale=.35]{graphics/backintime3}
 
 In other words, one of the messages seems to go `back in time'.
 

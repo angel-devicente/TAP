@@ -95,18 +95,18 @@
   % record this file as bracketed name
   \addchaptersource{{#1}}
   % typeset as nice C code
-  \lstset{style=reviewcode,language=C}\lstinputlisting{#2}}
+  \lstset{style=reviewcode,language=C}\lstinputlisting{snippets/#2}}
 \newcommand{\cxxverbatimsnippet}[2][XX]{
   % record this file as bracketed name
   \addchaptersource{{#1}}
   % typeset as nice C code
-  \lstset{style=reviewcode,language=C++}\lstinputlisting{#2}}
+  \lstset{style=reviewcode,language=C++}\lstinputlisting{snippets/#2}}
 \def\fverbatimsnippet#1{
-  \lstset{style=reviewcode,language=Fortran}\lstinputlisting{#1}
+  \lstset{style=reviewcode,language=Fortran}\lstinputlisting{snippets/#1}
   \lstset{style=reviewcode,language=C}
 }
 \def\pverbatimsnippet#1{
-  \lstset{style=reviewcode,language=Python}\lstinputlisting{#1}
+  \lstset{style=reviewcode,language=Python}\lstinputlisting{snippets/#1}
   \lstset{style=reviewcode,language=C}
 }
 \newenvironment{clisting}

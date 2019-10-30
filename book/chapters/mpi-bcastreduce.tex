@@ -24,13 +24,13 @@ all proceses getting the result. The MPI call for this is:
 Example: we give each process a random number, and sum these numbers together.
 The result should be approximately $1/2$ times the number of processes.
 
-\cverbatimsnippet[examples/mpi/c/allreducec.c]{allreducec}
+%% \cverbatimsnippet[snippets/allreducec]{allreducec}
 
 For Python we illustrate both the native and the numpy variant. In the
 numpy variant we create an array for the receive buffer, even though
 only one element is used.
 
-\cverbatimsnippet[examples/mpi/c/allreducep.c]{allreducep}
+%% \cverbatimsnippet[examples/mpi/c/allreducep.c]{allreducep}
 
 \begin{exercise}
   \label{ex:randommaxscale}
@@ -67,7 +67,7 @@ By default MPI will not overwrite the original data with the reduction
 result, but you can tell it to do so
 using the \indexmpishow{MPI_IN_PLACE} specifier:
 %
-\cverbatimsnippet[examples/mpi/c/allreduceinplace.c]{allreduceinplace}
+%%\cverbatimsnippet[examples/mpi/c/allreduceinplace.c]{allreduceinplace}
 %
 This has the advantage of saving half the memory.
 
@@ -128,7 +128,7 @@ MPI_Reduce( senddata, recvdata..., operator,
   data, they can actually leave the receive buffer undefined.
 \end{itemize}
 
-\cverbatimsnippet[examples/mpi/c/reduce.c]{reduce}
+%%\cverbatimsnippet[examples/mpi/c/reduce.c]{reduce}
 
 \mpiRoutineRef{MPI_Reduce}
 
@@ -168,12 +168,12 @@ the receive buffer is null or ignored as before.
 This example sets the buffer values through some pointer cleverness in
 order to have the same reduce call on all processes.
 %
-\cverbatimsnippet[examples/mpi/c/reduceinplace.c]{reduceinplace}
+%%\cverbatimsnippet[examples/mpi/c/reduceinplace.c]{reduceinplace}
 
 In Fortran the code is less elegant because you can not do
 these address calculations:
 %
-\fverbatimsnippet{reduceinplace-f}
+%%\fverbatimsnippet{reduceinplace-f}
 
 \Level 1 {Broadcast}
 \label{sec:bcast}
@@ -211,7 +211,7 @@ is specified as
 Example: in general we can not assume that all processes get the
 commandline arguments, so we broadcast them from process~0.
 
-\cverbatimsnippet[examples/mpi/c/usage.c]{usage}
+%%\cverbatimsnippet[examples/mpi/c/usage.c]{usage}
 
 \mpiRoutineRef{MPI_Bcast}
 
@@ -232,7 +232,7 @@ In python we illustrate the native and numpy variants. In the native
 variant the result is given as a function return; in the numpy variant
 the send buffer is reused.
 %
-\pverbatimsnippet{bcastp}
+%%\pverbatimsnippet{bcastp}
 
 \begin{figure}[p]
   \tiny

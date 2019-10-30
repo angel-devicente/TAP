@@ -25,7 +25,7 @@ per processor, we have a total of $\mathtt{n}\cdot\mathtt{p}$
 elements.
 
 \begin{figure}[ht]
-  \includegraphics[scale=.1]{mpi-array}
+  \includegraphics[scale=.1]{graphics/mpi-array}
   \caption{Local parts of a distributed array}
   \label{fig:mpi-array}
 \end{figure}
@@ -157,7 +157,7 @@ message, you can use \indexmpishow{MPI_Get_count} to determine its size,
 allocate a large enough receive buffer, and do a regular receive to
 have the data copied.
 
-\cverbatimsnippet[examples/mpi/c/probe.c]{probe}
+%\cverbatimsnippet[examples/mpi/c/probe.c]{probe}
 
 \mpiRoutineRef{MPI_Probe}
 
@@ -265,9 +265,9 @@ Using the \indexmpishow{MPI_ANY_SOURCE} specifier. We retrieve the
 actual source from the \indexmpishow{MPI_Status} object through the
 \indexmpishow{MPI_SOURCE} field.
 %
-\cverbatimsnippet[examples/mpi/c/anysource.c]{anysource}
+%\cverbatimsnippet[examples/mpi/c/anysource.c]{anysource}
 %
-\pverbatimsnippet{anysourcep}
+%\pverbatimsnippet{anysourcep}
 
 In sections \ref{prj:mandelbrot} and~\ref{sec:mpi-test} we explained
 the manager-worker model, and how it offers an opportunity for inspecting the
@@ -290,7 +290,7 @@ is indeed transferred, in the asynchronous case it only means that the
 data has been transferred to some system buffer.
 %
 \begin{figure}[ht]
-\includegraphics[scale=.15]{block-vs-sync}
+\includegraphics[scale=.15]{graphics/block-vs-sync}
 \caption{Blocking and synchronicity}
 \label{fig:block-sync}
 \end{figure}
@@ -299,7 +299,7 @@ The four possible cases are illustrated in figure~\ref{fig:block-sync}.
 MPI has a number of routines for synchronous communication,
 such as \indexmpishow{MPI_Ssend}.
 
-\cverbatimsnippet[examples/mpi/c/ssendblock.c]{ssendblock}
+%\cverbatimsnippet[examples/mpi/c/ssendblock.c]{ssendblock}
 
 \index{communication!synchronous|)}
 \index{communication!asynchronous|)}
@@ -359,9 +359,9 @@ After a request object has been used, possibly multiple times, it can
 be freed; see~\ref{ref:mpirequest}.
 
 In the following example a ping-pong is implemented with persistent communication.
-\cverbatimsnippet[examples/mpi/c/persist.c]{persist}
+%\cverbatimsnippet[examples/mpi/c/persist.c]{persist}
 %
-\pverbatimsnippet{persistp}
+%\pverbatimsnippet{persistp}
 
 As with ordinary send commands, there are the variants
 \indexmpishow{MPI_Bsend_init},
@@ -374,7 +374,7 @@ As with ordinary send commands, there are the variants
 \label{sec:buffered}
 
 \begin{figure}[ht]
-  \includegraphics[scale=.5]{bufferattach}
+  \includegraphics[scale=.5]{graphics/bufferattach}
   \caption{User communication routed through an attached buffer}
   \label{fig:bufattach}
 \end{figure}

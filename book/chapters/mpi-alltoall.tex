@@ -30,7 +30,7 @@ processes.
 \label{sec:alltoall-transpose}
 
 \begin{figure}[ht]
-  \includegraphics[scale=.4]{alltoall}
+  \includegraphics[scale=.4]{graphics/alltoall}
   \caption{All-to-all transposes data}
   \label{fig:alltoall}
 \end{figure}
@@ -80,7 +80,7 @@ array location) followed by a scatter of this array to the individual
 processes.
 
 \begin{figure}[ht]
-  \includegraphics[scale=.4]{reducescatter}
+  \includegraphics[scale=.4]{graphics/reducescatter}
   \caption{Reduce scatter}
   \label{fig:reducescatter}
 \end{figure}
@@ -141,7 +141,7 @@ let the other processes know about this.
 The solution is to use \indexmpishow{MPI_Reduce_scatter} to find out how many processes
 want to communicate with you, and then wait for precisely that many messages
 with a source value of \indexmpishow{MPI_ANY_SOURCE}.
-\cverbatimsnippet[examples/mpi/c/reducescatter.c]{reducescatter}
+%%\cverbatimsnippet[examples/mpi/c/reducescatter.c]{reducescatter}
 
 Use of \indexmpishow{MPI_Reduce_scatter} to implement the two-dimensional
 matrix-vector product.
@@ -149,7 +149,7 @@ Set up separate row and column communicators with
 \indexmpishow{MPI_Comm_split}, use \indexmpishow{MPI_Reduce_scatter} to combine
 local products.
 %
-\cverbatimsnippet[examples/mpi/c/mvp2d.c]{mvp2d}
+%%\cverbatimsnippet[examples/mpi/c/mvp2d.c]{mvp2d}
 
 \Level 0 {Barrier}
 \label{sec:barrier}

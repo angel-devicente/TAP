@@ -15,7 +15,7 @@
 \label{sec:gatherscatter}
 
 \begin{figure}[ht]
-  \includegraphics[scale=.4]{gather}
+  \includegraphics[scale=.4]{graphics/gather}
   \caption{Gather collects all data onto a root}
   \label{fig:gather}
 \end{figure}
@@ -75,7 +75,7 @@ processors.
 \mpiRoutineRef{MPI_Gather}
 
 Here is a small example:
-\cverbatimsnippet[examples/mpi/c/gather.c]{gather}
+%%\cverbatimsnippet[examples/mpi/c/gather.c]{gather}
 This will also be the basis of a more elaborate example in
 section~\ref{sec:v-collective}.
 
@@ -103,7 +103,7 @@ full problem, such as an interface system or the last coarsening level
 in multigrid.
 
 \begin{figure}[ht]
-  \includegraphics[scale=.4]{allgathermatrix}
+  \includegraphics[scale=.4]{graphics/allgathermatrix}
   \caption{Gather a distributed matrix onto one process}
   \label{fig:allgathermatrix}
 \end{figure}
@@ -116,7 +116,7 @@ elegantly with the `subarray' datatype; section~\ref{sec:type_subarray}.
 \Level 1 {Allgather}
 
 \begin{figure}[ht]
-  \includegraphics[scale=.4]{allgather}
+  \includegraphics[scale=.4]{graphics/allgather}
   \caption{All gather collects all data onto every process}
   \label{fig:allgather}
 \end{figure}
