@@ -5,3 +5,6 @@
 *.log
 *.out
 *.toc
+*.tex~
+*~
+*-nx.tex
