@@ -1,8 +1,0 @@
-* TODO TO DO list [0/5]
-  + [ ] Find a similarly good resource for Fortran
-    Perhaps http://www.egr.unlv.edu/~ed/fortran.html
-    Mandado mensaje pidiendo sources.
-    http://fortranwiki.org/fortran/show/Tutorials
-  + [ ] Goal is to create a nice book-style PDF
-  + [ ] and a nice slides-set
-  + [ ] and a nice set of exercises
